@@ -1,0 +1,135 @@
+#!/bin/sh
+
+################################################################################
+# Configuration
+################################################################################
+
+KBD_DEV="smc::kbd_backlight"
+kbd_cmd_brightdn() { sudo /usr/local/bin/brightctl kbd -16; }
+kbd_cmd_brightup() { sudo /usr/local/bin/brightctl kbd +16; }
+
+MON_DEV="acpi_video0"
+mon_cmd_brightdn() { sudo /usr/local/bin/brightctl screen -1; }
+mon_cmd_brightup() { sudo /usr/local/bin/brightctl screen +1; }
+
+VOL_DEV="Master"
+vol_cmd_volumedn() { amixer set "$VOL_DEV" 3db- unmute; }
+vol_cmd_volumeup() { amixer set "$VOL_DEV" 3db+ unmute; }
+vol_cmd_toggle()   { amixer set "$VOL_DEV" toggle; }
+
+ITEM_FILLED="$(printf "\uf192") "
+ITEM_EMPTY="$(printf "\uf111") "
+
+################################################################################
+# Main execution
+################################################################################
+
+export DISPLAY=":0"
+
+# progbar <progress_pct> <item_total> <item_style_filled> <item_style_empty>
+progbar()
+{
+	_filled=$((($1 * $2) / 100))
+	_empty=$(($2 - _filled))
+	echo "$(printf "%${_filled}s" | sed "s| |$3|g")$(printf "%${_empty}s" | sed "s| |$4|g")"
+}
+
+# notify <summary> <body>
+notify()
+{
+	notify-send -a uictl -u low -t 1000 -h string:x-canonical-private-synchronous:uictl-notif "$1" "$2"
+}
+
+case $1 in
+
+kbdbright)
+
+	case $2 in
+	down)
+		kbd_cmd_brightdn
+		;;
+	up)
+		kbd_cmd_brightup
+		;;
+	*)
+		exit 1
+		;;
+	esac
+	# Get current and maximum
+	read -r cur < "/sys/class/leds/$KBD_DEV/brightness"
+	read -r max < "/sys/class/leds/$KBD_DEV/max_brightness"
+	# Display notificaation
+	bar=$(progbar $((cur * 100 / max)) 10 "$ITEM_FILLED" "$ITEM_EMPTY")
+	notify "Keyboard backlight" "$bar"
+	;;
+
+monbright)
+
+	case $2 in
+	down)
+		mon_cmd_brightdn
+		;;
+	up)
+		mon_cmd_brightup
+		;;
+	*)
+		exit 1
+		;;
+	esac
+	# Get current and maximum
+	read -r cur < "/sys/class/backlight/$MON_DEV/brightness"
+	read -r max < "/sys/class/backlight/$MON_DEV/max_brightness"
+	# Display notificaation
+	bar=$(progbar $((cur * 100 / max)) 10 "$ITEM_FILLED" "$ITEM_EMPTY")
+	notify "Monitor backlight" "$bar"
+	;;
+
+power_supply)
+
+	# Wait for power supply status to update
+	sleep 2
+	# Update status text
+	tstat set
+	;;
+
+rfkill)
+
+	# Update status text
+	tstat set
+	;;
+
+volume)
+
+	case $2 in
+	down)
+		tmp=$(vol_cmd_volumedn)
+		;;
+	up)
+		tmp=$(vol_cmd_volumeup)
+		;;
+	toggle)
+		tmp=$(vol_cmd_toggle)
+		;;
+	*)
+		exit 1
+		;;
+	esac
+	# Get volume percentage and mute status from amixer output
+	data=$(echo "$tmp" | awk -F "[][%]" 'END{ print $2, $7 }')
+	read -r vol mute <<- EOF
+	$data
+	EOF
+	# Display notificaation
+	[ "$mute" = "off" ] && vol=0
+	bar=$(progbar $vol 10 "$ITEM_FILLED" "$ITEM_EMPTY")
+	notify "Volume" "$bar"
+#	canberra-gtk-play -i audio-volume-change -d "changeVolume"
+	# Update status text
+	tstat set
+	;;
+
+*)
+	;;
+
+esac
+
