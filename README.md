@@ -52,7 +52,7 @@ Set the configuration in `config.mk` and `uictl`.
 
 Install
 ```
-sudo make install USER=<user>
+sudo make install USER=user
 ```
-where *<user>* is the Linux username.
+where *user* is the Linux username.
 
