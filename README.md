@@ -54,3 +54,8 @@ Install
 ```
 sudo make install
 ```
+
+
+## Acknowledgements
+
+`uictl_run` was inspired by [Xpub](https://github.com/Ventto/xpub).
