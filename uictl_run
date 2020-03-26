@@ -1,0 +1,8 @@
+#!/bin/sh
+
+read -r tty < /sys/class/tty/tty0/active
+user=$(who | grep "$tty" | cut -d' ' -f1)
+data=$(cat "$(getent passwd "$user" | cut -d: -f6)"/.local/share/uictl/env)
+export "$data"
+/usr/bin/su "$user" -c "/usr/local/bin/uictl $1"
+

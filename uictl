@@ -24,8 +24,6 @@ ITEM_EMPTY="$(printf "\uf111") "
 # Main execution
 ################################################################################
 
-export DISPLAY=":0"
-
 # progbar <progress_pct> <item_total> <item_style_filled> <item_style_empty>
 progbar()
 {

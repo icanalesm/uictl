@@ -52,7 +52,13 @@ Set the configuration in `config.mk` and `uictl`.
 
 Install
 ```
-sudo make install USER=user
+sudo make install
 ```
-where *user* is the Linux username.
+
+Append the following to `~.xinitrc` before `exec dwm`
+```
+[ ! -d "$HOME/.local/share/uictl" ] && mkdir -p "$HOME/.local/share/uictl"
+echo "DISPLAY=$DISPLAY" > "$HOME/.local/share/uictl/env"
+chmod 400 "$HOME/.local/share/uictl/env"
+```
 
