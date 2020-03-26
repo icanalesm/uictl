@@ -1,8 +1,12 @@
 #!/bin/sh
 
 read -r tty < /sys/class/tty/tty0/active
+vt=vt$(echo "$tty" | sed -e 's/tty//g')
 user=$(who | grep "$tty" | cut -d' ' -f1)
-data=$(cat "$(getent passwd "$user" | cut -d: -f6)"/.local/share/uictl/env)
-export "$data"
+xorg=$(pgrep -a -U "$user" -t "$tty" Xorg | grep "$vt")
+
+DISPLAY=$(echo "$xorg" | grep -o ':[0-9]')
+export DISPLAY
+
 /usr/bin/su "$user" -c "/usr/local/bin/uictl $1"
 
