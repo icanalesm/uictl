@@ -5,6 +5,8 @@ vt=vt$(echo "$tty" | sed -e 's/tty//g')
 user=$(who | grep "$tty" | cut -d' ' -f1)
 xorg=$(pgrep -a -U "$user" -t "$tty" Xorg | grep "$vt")
 
+[ -z "$xorg" ] && exit
+
 DISPLAY=$(echo "$xorg" | grep -o ':[0-9]')
 export DISPLAY
 
