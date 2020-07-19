@@ -13,8 +13,8 @@ mon_cmd_brightdn() { sudo /usr/local/bin/brightctl screen -1; }
 mon_cmd_brightup() { sudo /usr/local/bin/brightctl screen +1; }
 
 VOL_DEV="Master"
-vol_cmd_volumedn() { amixer set "$VOL_DEV" 3db- unmute; }
-vol_cmd_volumeup() { amixer set "$VOL_DEV" 3db+ unmute; }
+vol_cmd_volumedn() { amixer set "$VOL_DEV" 5%- unmute; }
+vol_cmd_volumeup() { amixer set "$VOL_DEV" 5%+ unmute; }
 vol_cmd_toggle()   { amixer set "$VOL_DEV" toggle; }
 
 ITEM_FILLED="$(printf "\uf192") "
