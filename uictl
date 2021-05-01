@@ -12,13 +12,14 @@ MON_DEV="acpi_video0"
 mon_cmd_brightdn() { sudo /usr/local/bin/brightctl screen -1; }
 mon_cmd_brightup() { sudo /usr/local/bin/brightctl screen +1; }
 
-VOL_DEV="Master"
-vol_cmd_volumedn() { amixer set "$VOL_DEV" 5%- unmute; }
-vol_cmd_volumeup() { amixer set "$VOL_DEV" 5%+ unmute; }
-vol_cmd_toggle()   { amixer set "$VOL_DEV" toggle; }
+VOL_DEV="@DEFAULT_SINK@"
+vol_cmd_volumedn() { pactl set-sink-volume "$VOL_DEV" -5%; }
+vol_cmd_volumeup() { pactl set-sink-volume "$VOL_DEV" +5%; }
+vol_cmd_toggle()   { pactl set-sink-mute "$VOL_DEV" toggle; }
 
 ITEM_FILLED="$(printf "\uf192") "
 ITEM_EMPTY="$(printf "\uf111") "
+VOL_MUTED="$(printf "\uf6a9")"
 
 ################################################################################
 # Main execution
@@ -100,25 +101,25 @@ volume)
 
 	case $2 in
 	down)
-		tmp=$(vol_cmd_volumedn)
+		vol_cmd_volumedn
 		;;
 	up)
-		tmp=$(vol_cmd_volumeup)
+		vol_cmd_volumeup
 		;;
 	toggle)
-		tmp=$(vol_cmd_toggle)
+		vol_cmd_toggle
 		;;
 	*)
 		exit 1
 		;;
 	esac
 	# Get volume percentage and mute status from amixer output
-	data=$(echo "$tmp" | awk -F "[][%]" 'END{ print $2, $7 }')
+	data=$(tstat | awk -F "[ %]+" '{ print $6, $5 }')
 	read -r vol mute <<- EOF
 	$data
 	EOF
 	# Display notificaation
-	[ "$mute" = "off" ] && vol=0
+	[ "$mute" = "$VOL_MUTED" ] && vol=0
 	bar=$(progbar $vol 10 "$ITEM_FILLED" "$ITEM_EMPTY")
 	notify "Volume" "$bar"
 #	canberra-gtk-play -i audio-volume-change -d "changeVolume"
