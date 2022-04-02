@@ -30,7 +30,7 @@ For wifi/bluetooth and power source, `uictl` uses a udev rule to update the stat
 
 ## Configuration
 
-`uictl` is configured via the `config.mk`, `uictl` and `uictl_run` files.
+Configuration is done via the `config.mk`, `uictl` and `uictl_run` files.
 
 ### `config.mk`
 
