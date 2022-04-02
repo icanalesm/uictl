@@ -24,7 +24,7 @@ For wifi/bluetooth and power source, `uictl` uses a udev rule to update the stat
 
 * pactl ([pulseaudio](https://www.freedesktop.org/wiki/Software/PulseAudio/) utils) for volume control
 * [brightctl](https://github.com/icanalesm/brightctl) for backlight control
-* [tstat](https://github.com/icanalesm/tstat) for setting the status bar and volume info
+* [tstat](https://github.com/icanalesm/tstat) for volume info and setting the status bar
 * A notification server for desktop notifications
 
 
