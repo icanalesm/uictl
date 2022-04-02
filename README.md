@@ -22,7 +22,7 @@ For wifi/bluetooth and power source, `uictl` uses a udev rule to update the stat
 
 `uictl` has the following dependencies:
 
-* pactl ([pulseaudio](https://www.freedesktop.org/wiki/Software/PulseAudio/) utils) for volume control
+* `pactl` ([pulseaudio](https://www.freedesktop.org/wiki/Software/PulseAudio/) utils) for volume control
 * [brightctl](https://github.com/icanalesm/brightctl) for backlight control
 * [tstat](https://github.com/icanalesm/tstat) for volume info and setting the status bar
 * A notification server for desktop notifications
@@ -41,6 +41,7 @@ This file is where the installation options are specified. By default, installat
 This script is where the keyboard, screen and volume customisation takes place.
 
 ### `uictl_run`
+
 This script sets the required environment variables when `uictl` is called from the udev rules file. The PulseAudio application is specified here (e.g., `pipewire-pulse` or `pulseaudio`).
 
 
@@ -51,7 +52,7 @@ git clone https://github.com/icanalesm/uictl.git
 cd uictl
 ```
 
-Set the configuration in `config.mk` and `uictl`.
+Set the configuration in `config.mk`, `uictl` and `uictl_run`.
 
 Install
 ```
