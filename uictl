@@ -113,7 +113,7 @@ volume)
 		exit 1
 		;;
 	esac
-	# Get volume percentage and mute status from amixer output
+	# Get volume percentage and mute status from tstat output
 	data=$(tstat | awk -F "[ %]+" '{ print $6, $5 }')
 	read -r vol mute <<- EOF
 	$data
