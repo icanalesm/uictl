@@ -1,5 +1,15 @@
 #!/bin/sh
 
+################################################################################
+# Configuration
+################################################################################
+
+pulse=pipewire-pulse
+
+################################################################################
+# Main execution
+################################################################################
+
 read -r tty < /sys/class/tty/tty0/active
 vt=vt$(echo "$tty" | sed -e 's/tty//g')
 user=$(who | grep "$tty" | cut -d' ' -f1)
@@ -10,7 +20,7 @@ xorg=$(pgrep -a -U "$user" -t "$tty" Xorg | grep "$vt")
 DISPLAY=$(echo "$xorg" | grep -o ':[0-9]')
 export DISPLAY
 
-pa=$(pgrep -U "$user" pulseaudio)
+pa=$(pgrep -U "$user" "$pulse")
 env=$(tr '\0' '\n' < "/proc/$pa/environ")
 
 PULSE_RUNTIME_PATH=$(echo "$env" | grep '^PULSE_RUNTIME_PATH=' | cut -d= -f2)

@@ -30,7 +30,7 @@ For wifi/bluetooth and power source, `uictl` uses a udev rule to update the stat
 
 ## Configuration
 
-`uictl` is configured via the `config.mk` and `uictl` files.
+`uictl` is configured via the `config.mk`, `uictl` and `uictl_run` files.
 
 ### `config.mk`
 
@@ -39,6 +39,9 @@ This file is where the installation options are specified. By default, installat
 ### `uictl`
 
 This script is where the keyboard, screen and volume customisation takes place.
+
+### `uictl_run`
+This script sets the required environment variables when `uictl` is called from the udev rules file. The PulseAudio application is specified here (e.g., `pipewire-pulse` or `pulseaudio`).
 
 
 ## Installation
