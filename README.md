@@ -23,7 +23,7 @@ dwmui has the following dependencies:
 
 * [dwmblocks-async](https://github.com/UtkarshVerma/dwmblocks-async) as status bar
 * [brightnessctl](https://github.com/Hummer12007/brightnessctl) for backlight information
-* [wpctl](https://pipewire.pages.freedesktop.org/wireplumber/tools/wpctl.html) for volume information
+* [`wpctl`](https://pipewire.pages.freedesktop.org/wireplumber/tools/wpctl.html)([wireplumber](https://pipewire.pages.freedesktop.org/wireplumber)) for volume information
 * A notification server for desktop notifications
 
 
