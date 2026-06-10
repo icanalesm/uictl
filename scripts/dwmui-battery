@@ -32,7 +32,7 @@ case "$status" in
             icon=""
         fi
         ;;
-    "Not charging") icon="(-)" ;;
+    "Not charging") icon="" ;;
     Unknown) icon="(?)" ;;
     *)
         err "Unknown status \"$status\""
